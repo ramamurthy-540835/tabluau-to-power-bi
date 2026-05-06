@@ -1,0 +1,24 @@
+# Secrets — never bake into image
+.env
+.env.*
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+
+# Dev / test artifacts
+tests/
+output_test/
+output_test2/
+output_test.pbit/
+sample_output/
+
+# Git
+.git
+.gitignore
+
+# Local output dirs (created fresh inside container)
+input_workbooks/
+pbi_output/

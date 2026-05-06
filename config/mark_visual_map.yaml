@@ -1,0 +1,131 @@
+# Maps Tableau mark types to Power BI visual types
+# shelf_mapping defines how Tableau shelves map to Power BI visual fields
+
+bar:
+  pbi_visual: clusteredBarChart
+  shelf_mapping:
+    rows: axis
+    cols: values
+    color: legend
+    size: ~
+    label: data_labels
+    detail: tooltips
+  notes: "Use stackedBarChart if color encoding is used for stacking."
+
+line:
+  pbi_visual: lineChart
+  shelf_mapping:
+    rows: values
+    cols: axis
+    color: legend
+    size: ~
+    label: data_labels
+    detail: tooltips
+
+area:
+  pbi_visual: areaChart
+  shelf_mapping:
+    rows: values
+    cols: axis
+    color: legend
+    label: data_labels
+
+scatter:
+  pbi_visual: scatterChart
+  shelf_mapping:
+    rows: y_axis
+    cols: x_axis
+    color: legend
+    size: bubble_size
+    detail: details
+    label: data_labels
+
+pie:
+  pbi_visual: pieChart
+  shelf_mapping:
+    rows: values
+    color: legend
+    label: data_labels
+
+map:
+  pbi_visual: azureMap
+  shelf_mapping:
+    rows: latitude
+    cols: longitude
+    color: color_saturation
+    size: bubble_size
+    label: tooltips
+  notes: "If geographic field detected, use filledMap instead."
+
+filledmap:
+  pbi_visual: filledMap
+  shelf_mapping:
+    rows: location
+    color: color_saturation
+
+heatmap:
+  pbi_visual: tableEx
+  shelf_mapping:
+    rows: rows
+    cols: columns
+    color: values
+  notes: "Power BI has no native heatmap. Use Matrix with conditional formatting or Deneb."
+
+treemap:
+  pbi_visual: treemap
+  shelf_mapping:
+    rows: group
+    color: values
+    size: values
+
+gantt:
+  pbi_visual: custom_gantt
+  shelf_mapping:
+    rows: task
+    cols: date_start
+    size: duration
+    color: category
+  notes: "No native Gantt. Use AppSource Gantt Chart visual."
+
+text:
+  pbi_visual: tableEx
+  shelf_mapping:
+    rows: rows
+    cols: columns
+    label: values
+  notes: "Tableau text tables map to Power BI Matrix or Table visual."
+
+circle:
+  pbi_visual: scatterChart
+  shelf_mapping:
+    rows: y_axis
+    cols: x_axis
+    color: legend
+    size: bubble_size
+
+square:
+  pbi_visual: scatterChart
+  shelf_mapping:
+    rows: y_axis
+    cols: x_axis
+    color: legend
+
+shape:
+  pbi_visual: scatterChart
+  shelf_mapping:
+    rows: y_axis
+    cols: x_axis
+    color: legend
+    shape: shape_field
+
+density:
+  pbi_visual: custom_deneb
+  notes: "Use Deneb Vega-Lite for density/hex-bin visuals."
+
+polygon:
+  pbi_visual: azureMap
+  notes: "Shape maps for polygon drawing."
+
+auto:
+  pbi_visual: clusteredBarChart
+  notes: "Default fallback — review manually."

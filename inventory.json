@@ -1,0 +1,15 @@
+[
+  {
+    "file": "tests\\fixtures\\sample_workbook.twb",
+    "source_hash": "699381434b70bd7c5701cb69c39657c81afdace8a782f26abdcd10672bb16f27",
+    "data_sources": 1,
+    "worksheets": 2,
+    "dashboards": 1,
+    "calculated_fields": 2,
+    "anti_patterns": 0,
+    "risk_scores": {
+      "federated.1234": 15,
+      "dashboard:Executive Overview": 13
+    }
+  }
+]

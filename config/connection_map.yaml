@@ -1,0 +1,98 @@
+# Maps Tableau connection class names to Power Query connector details
+# Fields: connector (M function), params (list of required params), auth_mode
+
+sqlserver:
+  connector: Sql.Database
+  params: [server, database]
+  auth_mode: windows
+  m_template: "Sql.Database(\"{server}\", \"{database}\")"
+
+oracle:
+  connector: Oracle.Database
+  params: [server, database]
+  auth_mode: database
+  m_template: "Oracle.Database(\"{server}\", [Query=\"SELECT * FROM {schema}.{table}\"])"
+
+snowflake:
+  connector: Snowflake.Databases
+  params: [server, database, schema]
+  auth_mode: snowflake
+  m_template: "Snowflake.Databases(\"{server}\"){[Name=\"{database}\"]}[Data]{[Name=\"{schema}\"]}[Data]{[Name=\"{table}\"]}[Data]"
+
+redshift:
+  connector: AmazonRedshift.Database
+  params: [server, port, database]
+  auth_mode: database
+  m_template: "AmazonRedshift.Database(\"{server}:{port}\", \"{database}\")"
+
+postgres:
+  connector: PostgreSQL.Database
+  params: [server, port, database]
+  auth_mode: database
+  m_template: "PostgreSQL.Database(\"{server}\", \"{database}\")"
+
+mysql:
+  connector: MySQL.Database
+  params: [server, database]
+  auth_mode: database
+  m_template: "MySql.Database(\"{server}\", \"{database}\")"
+
+bigquery:
+  connector: GoogleBigQuery.Database
+  params: [project, dataset]
+  auth_mode: oauth
+  m_template: "GoogleBigQuery.Database(\"{project}\", \"{dataset}\")"
+
+athena:
+  connector: AmazonAthena.Database
+  params: [server, database]
+  auth_mode: iam
+  m_template: "AmazonAthena.Database(\"{server}\", \"{database}\")"
+
+databricks:
+  connector: Databricks.Catalogs
+  params: [server, catalog]
+  auth_mode: token
+  m_template: "Databricks.Catalogs(\"{server}\", \"{catalog}\")"
+
+hive:
+  connector: Hive.Database
+  params: [server, database]
+  auth_mode: windows
+  m_template: "Hive.Database(\"{server}\", \"{database}\")"
+
+excel-direct:
+  connector: Excel.Workbook
+  params: [file_path]
+  auth_mode: none
+  m_template: "Excel.Workbook(File.Contents(\"{file_path}\"), null, true)"
+
+text-csv:
+  connector: Csv.Document
+  params: [file_path]
+  auth_mode: none
+  m_template: "Csv.Document(File.Contents(\"{file_path}\"),[Delimiter=\",\", Columns=16, Encoding=65001, QuoteStyle=QuoteStyle.None])"
+
+hyper:
+  connector: Import
+  params: []
+  auth_mode: none
+  m_template: "null  // TODO: Hyper extract — export to CSV from Tableau Desktop and replace this line"
+
+webdata-direct:
+  connector: Web.Contents
+  params: [url]
+  auth_mode: none
+  m_template: "Web.Contents(\"{url}\")"
+
+salesforce:
+  connector: Salesforce.Data
+  params: []
+  auth_mode: oauth
+  m_template: "Salesforce.Data(\"https://login.salesforce.com\", [ApiVersion=\"v59.0\"])"
+
+sharepoint-excel:
+  connector: SharePoint.Files
+  params: [site_url]
+  auth_mode: oauth
+  m_template: "SharePoint.Files(\"{site_url}\", [ApiVersion=15])"

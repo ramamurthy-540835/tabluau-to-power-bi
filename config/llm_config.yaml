@@ -1,0 +1,14 @@
+model: claude-sonnet-4-6
+temperature: 0.1
+max_tokens: 2048
+max_retries: 2
+timeout_seconds: 60
+cost_cap_per_workbook_usd: 5.00
+concurrent_calls: 8
+enable_prompt_caching: true
+enable_batch_api: false
+
+# Routing thresholds
+min_confidence_for_deterministic: 0.85
+max_ast_depth_for_deterministic: 6
+max_dependencies_for_deterministic: 3

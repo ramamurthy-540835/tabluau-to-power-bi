@@ -1,0 +1,384 @@
+# Tableau function → DAX translation strategy
+# strategy: direct | rewrite | llm-assisted | unsupported
+# dax: DAX equivalent (use {arg1}, {arg2} as placeholders)
+
+# --- Aggregate functions ---
+SUM:
+  strategy: direct
+  dax: "SUM({arg1})"
+  notes: ~
+
+AVG:
+  strategy: direct
+  dax: "AVERAGE({arg1})"
+
+MIN:
+  strategy: direct
+  dax: "MIN({arg1})"
+
+MAX:
+  strategy: direct
+  dax: "MAX({arg1})"
+
+COUNT:
+  strategy: direct
+  dax: "COUNT({arg1})"
+
+COUNTD:
+  strategy: direct
+  dax: "DISTINCTCOUNT({arg1})"
+
+MEDIAN:
+  strategy: direct
+  dax: "MEDIAN({arg1})"
+
+STDEV:
+  strategy: direct
+  dax: "STDEV.S({arg1})"
+
+STDEVP:
+  strategy: direct
+  dax: "STDEV.P({arg1})"
+
+VAR:
+  strategy: direct
+  dax: "VAR.S({arg1})"
+
+VARP:
+  strategy: direct
+  dax: "VAR.P({arg1})"
+
+PERCENTILE:
+  strategy: rewrite
+  dax: "PERCENTILX.INC(table, {arg1}, {arg2})"
+  notes: "Requires explicit table reference."
+
+ATTR:
+  strategy: rewrite
+  dax: "IF(HASONEVALUE({arg1}), VALUES({arg1}), BLANK())"
+
+# --- Logical functions ---
+IF:
+  strategy: direct
+  dax: "IF({arg1}, {arg2}, {arg3})"
+
+IIF:
+  strategy: direct
+  dax: "IF({arg1}, {arg2}, {arg3})"
+
+IFNULL:
+  strategy: direct
+  dax: "IF(ISBLANK({arg1}), {arg2}, {arg1})"
+
+ISNULL:
+  strategy: direct
+  dax: "ISBLANK({arg1})"
+
+ZN:
+  strategy: direct
+  dax: "IF(ISBLANK({arg1}), 0, {arg1})"
+
+AND:
+  strategy: direct
+  dax: "AND({arg1}, {arg2})"
+
+OR:
+  strategy: direct
+  dax: "OR({arg1}, {arg2})"
+
+NOT:
+  strategy: direct
+  dax: "NOT({arg1})"
+
+CASE:
+  strategy: rewrite
+  dax: "SWITCH({arg1}, {cases})"
+  notes: "CASE WHEN maps to SWITCH(TRUE(), ...)."
+
+# --- String functions ---
+STR:
+  strategy: direct
+  dax: "FORMAT({arg1}, \"\")"
+
+STRING:
+  strategy: direct
+  dax: "FORMAT({arg1}, \"\")"
+
+LEN:
+  strategy: direct
+  dax: "LEN({arg1})"
+
+LEFT:
+  strategy: direct
+  dax: "LEFT({arg1}, {arg2})"
+
+RIGHT:
+  strategy: direct
+  dax: "RIGHT({arg1}, {arg2})"
+
+MID:
+  strategy: direct
+  dax: "MID({arg1}, {arg2}, {arg3})"
+
+FIND:
+  strategy: direct
+  dax: "FIND({arg2}, {arg1})"
+  notes: "Tableau FIND(needle, haystack) vs DAX FIND(needle, within_text)."
+
+CONTAINS:
+  strategy: direct
+  dax: "CONTAINSSTRING({arg1}, {arg2})"
+
+STARTSWITH:
+  strategy: direct
+  dax: "LEFT({arg1}, LEN({arg2})) = {arg2}"
+
+ENDSWITH:
+  strategy: direct
+  dax: "RIGHT({arg1}, LEN({arg2})) = {arg2}"
+
+UPPER:
+  strategy: direct
+  dax: "UPPER({arg1})"
+
+LOWER:
+  strategy: direct
+  dax: "LOWER({arg1})"
+
+TRIM:
+  strategy: direct
+  dax: "TRIM({arg1})"
+
+LTRIM:
+  strategy: rewrite
+  dax: "SUBSTITUTE(SUBSTITUTE({arg1}, \" \", UNICHAR(0)), UNICHAR(0), \" \")"
+  notes: "No native LTRIM in DAX; use workaround or Power Query."
+
+RTRIM:
+  strategy: rewrite
+  dax: "TRIMRIGHT workaround"
+  notes: "No native RTRIM in DAX; prefer Power Query."
+
+REPLACE:
+  strategy: direct
+  dax: "SUBSTITUTE({arg1}, {arg2}, {arg3})"
+
+SPLIT:
+  strategy: llm-assisted
+  notes: "No direct DAX equivalent; use Power Query or complex DAX."
+
+REGEXP_MATCH:
+  strategy: llm-assisted
+  notes: "No native regex in DAX; implement as Power Query custom function."
+
+# --- Number functions ---
+ABS:
+  strategy: direct
+  dax: "ABS({arg1})"
+
+CEILING:
+  strategy: direct
+  dax: "CEILING({arg1}, 1)"
+
+FLOOR:
+  strategy: direct
+  dax: "FLOOR({arg1}, 1)"
+
+ROUND:
+  strategy: direct
+  dax: "ROUND({arg1}, {arg2})"
+
+SQRT:
+  strategy: direct
+  dax: "SQRT({arg1})"
+
+POWER:
+  strategy: direct
+  dax: "POWER({arg1}, {arg2})"
+
+LOG:
+  strategy: direct
+  dax: "LOG({arg1}, {arg2})"
+
+LN:
+  strategy: direct
+  dax: "LN({arg1})"
+
+EXP:
+  strategy: direct
+  dax: "EXP({arg1})"
+
+INT:
+  strategy: direct
+  dax: "INT({arg1})"
+
+SIGN:
+  strategy: direct
+  dax: "SIGN({arg1})"
+
+DIV:
+  strategy: rewrite
+  dax: "IF({arg2}=0, BLANK(), INT({arg1}/{arg2}))"
+
+MOD:
+  strategy: direct
+  dax: "MOD({arg1}, {arg2})"
+
+# --- Date functions ---
+TODAY:
+  strategy: direct
+  dax: "TODAY()"
+
+NOW:
+  strategy: direct
+  dax: "NOW()"
+
+YEAR:
+  strategy: direct
+  dax: "YEAR({arg1})"
+
+MONTH:
+  strategy: direct
+  dax: "MONTH({arg1})"
+
+DAY:
+  strategy: direct
+  dax: "DAY({arg1})"
+
+HOUR:
+  strategy: direct
+  dax: "HOUR({arg1})"
+
+MINUTE:
+  strategy: direct
+  dax: "MINUTE({arg1})"
+
+SECOND:
+  strategy: direct
+  dax: "SECOND({arg1})"
+
+WEEK:
+  strategy: rewrite
+  dax: "WEEKNUM({arg1})"
+
+QUARTER:
+  strategy: rewrite
+  dax: "ROUNDUP(MONTH({arg1})/3, 0)"
+
+DATEADD:
+  strategy: direct
+  dax: "DATEADD({arg1}, {arg2}, {arg3})"
+  notes: "Period must be mapped: day→DAY, month→MONTH, year→YEAR, quarter→QUARTER."
+
+DATEDIFF:
+  strategy: direct
+  dax: "DATEDIFF({arg1}, {arg2}, {arg3})"
+
+DATETRUNC:
+  strategy: rewrite
+  dax: "Use DATE(YEAR({arg1}), 1, 1) pattern for year truncation."
+  notes: "llm-assisted for non-year truncations."
+
+MAKEDATE:
+  strategy: direct
+  dax: "DATE({arg1}, {arg2}, {arg3})"
+
+ISDATE:
+  strategy: rewrite
+  dax: "NOT(ISBLANK(DATEVALUE({arg1})))"
+
+# --- Table calculation functions (LLM-assisted) ---
+RUNNING_SUM:
+  strategy: llm-assisted
+  notes: "Requires explicit date ordering. CALCULATE with FILTER over ALLSELECTED."
+
+RUNNING_AVG:
+  strategy: llm-assisted
+  notes: "Running average pattern with AVERAGEX over cumulative set."
+
+RUNNING_MAX:
+  strategy: llm-assisted
+
+RUNNING_MIN:
+  strategy: llm-assisted
+
+RUNNING_COUNT:
+  strategy: llm-assisted
+
+WINDOW_SUM:
+  strategy: llm-assisted
+  notes: "Use CALCULATE with DATESBETWEEN or relative offset."
+
+WINDOW_AVG:
+  strategy: llm-assisted
+
+WINDOW_MAX:
+  strategy: llm-assisted
+
+WINDOW_MIN:
+  strategy: llm-assisted
+
+WINDOW_COUNT:
+  strategy: llm-assisted
+
+INDEX:
+  strategy: llm-assisted
+  notes: "Maps to RANKX on the visual's row set."
+
+RANK:
+  strategy: rewrite
+  dax: "RANKX(ALLSELECTED(table[column]), {arg1})"
+
+FIRST:
+  strategy: llm-assisted
+  notes: "Row-context dependent. Usually unnecessary in DAX."
+
+LAST:
+  strategy: llm-assisted
+
+LOOKUP:
+  strategy: llm-assisted
+  notes: "Use OFFSET() in Power BI 2024+. Check tenant version."
+
+TOTAL:
+  strategy: llm-assisted
+
+SIZE:
+  strategy: llm-assisted
+
+PREVIOUS_VALUE:
+  strategy: llm-assisted
+
+# --- Type conversion ---
+FLOAT:
+  strategy: direct
+  dax: "CONVERT({arg1}, DOUBLE)"
+
+INT:
+  strategy: direct
+  dax: "INT({arg1})"
+
+DATE:
+  strategy: direct
+  dax: "DATEVALUE({arg1})"
+
+DATETIME:
+  strategy: direct
+  dax: "DATEVALUE({arg1})"
+
+BOOL:
+  strategy: rewrite
+  dax: "IF({arg1}=TRUE, TRUE, FALSE)"
+
+# --- LOD expressions — handled by LLM translator ---
+FIXED:
+  strategy: llm-assisted
+  notes: "CALCULATE(AGG, ALLEXCEPT(Table, Table[Dim]))"
+
+INCLUDE:
+  strategy: llm-assisted
+  notes: "CALCULATE(AGG, VALUES(Table[Dim]))"
+
+EXCLUDE:
+  strategy: llm-assisted
+  notes: "CALCULATE(AGG, ALL(Table[Dim]))"

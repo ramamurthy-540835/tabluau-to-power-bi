@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau → Power BI Accelerator | Mastech Digital</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; }
+    body { display: flex; background: #F0F4F8; overflow: hidden; }
+
+    /* ── Scrollbars ───────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+    /* ── Sidebar ──────────────────────────────────────────────────── */
+    #sidebar {
+      width: 268px;
+      min-width: 268px;
+      background: linear-gradient(175deg, #00264D 0%, #003A72 45%, #004A90 100%);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.25);
+      z-index: 10;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .logo-wrap {
+      margin: 20px 18px 0;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    .logo-wrap img { height: 30px; object-fit: contain; }
+
+    .sidebar-app-name {
+      color: #fff;
+      font-size: 14.5px;
+      font-weight: 700;
+      padding: 18px 20px 2px;
+      letter-spacing: -0.2px;
+      line-height: 1.25;
+    }
+
+    .sidebar-tagline {
+      color: rgba(255,255,255,0.48);
+      font-size: 11px;
+      padding: 0 20px 20px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .sidebar-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin: 0 16px 12px;
+    }
+
+    .nav-section-label {
+      color: rgba(255,255,255,0.35);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 0 20px 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      margin: 0 8px 2px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: rgba(255,255,255,0.65);
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    .nav-item.active {
+      background: rgba(0,120,212,0.75);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+
+    .nav-badge {
+      margin-left: auto;
+      background: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.9);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+
+    .nav-badge.blue  { background: #0078D4; }
+    .nav-badge.green { background: #107C41; }
+    .nav-badge.red   { background: #DC2626; }
+
+    /* ── Sidebar features list ────────────────────────────────────── */
+    .feature-list { padding: 0 16px; margin-bottom: 4px; }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 6px 0;
+      color: rgba(255,255,255,0.62);
+      font-size: 12px;
+    }
+
+    .feature-dot {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(0,188,242,0.25);
+      border: 1.5px solid rgba(0,188,242,0.5);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 10px; color: #00BCF2;
+    }
+
+    /* ── Sidebar settings ─────────────────────────────────────────── */
+    .settings-box {
+      padding: 14px 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: auto;
+    }
+
+    .settings-title {
+      color: rgba(255,255,255,0.35);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .settings-label { color: rgba(255,255,255,0.55); font-size: 11.5px; margin-bottom: 4px; }
+
+    .settings-input {
+      width: 100%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12.5px;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 12px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .settings-input::placeholder { color: rgba(255,255,255,0.35); }
+    .settings-input:focus { border-color: rgba(0,188,242,0.6); background: rgba(255,255,255,0.15); }
+
+    .radio-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .radio-pill {
+      flex: 1;
+      text-align: center;
+      padding: 5px 4px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 500;
+      cursor: pointer;
+      color: rgba(255,255,255,0.55);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .radio-pill:hover { border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.8); }
+    .radio-pill.selected { background: rgba(0,120,212,0.7); color: #fff; border-color: transparent; }
+
+    /* ── Main area ────────────────────────────────────────────────── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* ── Top bar ─────────────────────────────────────────────────── */
+    #topbar {
+      background: #fff;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 0 28px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #94A3B8;
+    }
+
+    .breadcrumb-current { color: #1E293B; font-weight: 600; }
+
+    .breadcrumb-sep { color: #CBD5E1; font-size: 12px; }
+
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+    .api-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 13px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .api-badge.ok { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
+    .api-badge.warn { background: #FEF3C7; border: 1px solid #FCD34D; color: #78350F; }
+
+    .api-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+    }
+
+    .api-badge.ok .api-dot { background: #10B981; }
+    .api-badge.warn .api-dot { background: #F59E0B; animation: pulse 1.5s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ── Content scroller ────────────────────────────────────────── */
+    #content { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+    /* ── View toggling ───────────────────────────────────────────── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── Hero banner ─────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(110deg, #00264D 0%, #0056A8 55%, #0078D4 100%);
+      border-radius: 14px;
+      padding: 26px 28px;
+      color: #fff;
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before, .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .hero::before { width: 260px; height: 260px; right: -60px; top: -80px; }
+    .hero::after  { width: 160px; height: 160px; right: 120px; bottom: -60px; }
+
+    .hero-title { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; }
+
+    .hero-sub { font-size: 13px; opacity: 0.75; line-height: 1.5; }
+
+    .hero-chips { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+    .hero-chip {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* ── Cards ───────────────────────────────────────────────────── */
+    .card {
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    .card-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid #F1F5F9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-head-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1E293B;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body { padding: 20px; }
+
+    /* ── Upload zone ─────────────────────────────────────────────── */
+    #drop-zone {
+      border: 2px dashed #CBD5E1;
+      border-radius: 12px;
+      padding: 52px 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #FAFBFF;
+      position: relative;
+    }
+
+    #drop-zone:hover, #drop-zone.drag-over {
+      border-color: #0078D4;
+      background: #EFF6FF;
+    }
+
+    .upload-icon-wrap {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, #DBEAFE, #EFF6FF);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 30px;
+      box-shadow: 0 4px 12px rgba(0,120,212,0.12);
+    }
+
+    .upload-headline { font-size: 16px; font-weight: 700; color: #1E293B; margin-bottom: 6px; }
+    .upload-sub { font-size: 13px; color: #64748B; margin-bottom: 18px; }
+
+    .upload-formats {
+      display: inline-flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .fmt-badge {
+      background: #F0F4FF;
+      border: 1px solid #BFDBFE;
+      color: #3B5DD4;
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Consolas', monospace;
+    }
+
+    /* ── File table ───────────────────────────────────────────────── */
+    .file-row {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid #F1F5F9;
+      transition: background 0.1s;
+    }
+
+    .file-row:last-child { border-bottom: none; }
+    .file-row:hover { background: #FAFBFF; }
+
+    .file-ext {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #DBEAFE, #EFF6FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #1D4ED8;
+      flex-shrink: 0;
+      font-family: 'Consolas', monospace;
+      margin-right: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .file-name { font-size: 13.5px; font-weight: 600; color: #1E293B; }
+    .file-size { font-size: 11.5px; color: #94A3B8; margin-top: 1px; }
+    .file-meta { flex: 1; min-width: 0; }
+
+    /* ── Buttons ──────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0078D4, #0056A8);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(0,120,212,0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #106EBE, #004A94);
+      box-shadow: 0 5px 15px rgba(0,120,212,0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      background: #94A3B8;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #374151;
+      border: 1.5px solid #D1D5DB;
+    }
+
+    .btn-outline:hover { background: #F9FAFB; border-color: #9CA3AF; }
+
+    .btn-danger {
+      background: #FEF2F2;
+      color: #DC2626;
+      border: 1.5px solid #FECACA;
+    }
+
+    .btn-danger:hover { background: #FEE2E2; }
+
+    .btn-ghost {
+      background: transparent;
+      color: #64748B;
+      border: none;
+    }
+
+    .btn-ghost:hover { background: #F1F5F9; color: #1E293B; }
+
+    .btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 6px; }
+
+    .btn-lg { padding: 12px 28px; font-size: 14.5px; border-radius: 10px; }
+
+    /* ── Pipeline step tracker ───────────────────────────────────── */
+    .step-track { display: flex; flex-direction: column; gap: 5px; }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 9px;
+      border: 1.5px solid transparent;
+      transition: all 0.25s;
+    }
+
+    .step-item.pending { background: #F8FAFC; border-color: #E2E8F0; }
+    .step-item.running { background: linear-gradient(135deg, #EFF6FF, #DBEAFE); border-color: #93C5FD; }
+    .step-item.done    { background: linear-gradient(135deg, #F0FDF4, #DCFCE7); border-color: #86EFAC; }
+    .step-item.error   { background: #FEF2F2; border-color: #FCA5A5; }
+
+    .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      flex-shrink: 0;
+      transition: all 0.25s;
+    }
+
+    .step-num.pending { background: #E2E8F0; color: #94A3B8; }
+    .step-num.running { background: #0078D4; color: #fff; }
+    .step-num.done    { background: #107C41; color: #fff; }
+    .step-num.error   { background: #DC2626; color: #fff; }
+
+    .step-body { flex: 1; min-width: 0; }
+
+    .step-label { font-size: 13px; font-weight: 600; transition: color 0.2s; }
+    .step-label.pending { color: #94A3B8; font-weight: 500; }
+    .step-label.running { color: #1D4ED8; }
+    .step-label.done    { color: #166534; }
+    .step-label.error   { color: #991B1B; }
+
+    .step-msg { font-size: 12px; color: #64748B; margin-top: 2px; }
+
+    .step-spinner {
+      width: 15px; height: 15px;
+      border: 2px solid rgba(0,120,212,0.2);
+      border-top-color: #0078D4;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Progress bar ────────────────────────────────────────────── */
+    .progress-wrap {
+      height: 5px;
+      background: #E2E8F0;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0078D4, #00BCF2);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    /* ── KPI cards ───────────────────────────────────────────────── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+
+    .kpi-card {
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 16px 14px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+    .kpi-val { font-size: 30px; font-weight: 800; line-height: 1; margin-bottom: 5px; }
+    .kpi-lbl { font-size: 11px; font-weight: 600; color: #64748B; text-transform: uppercase; letter-spacing: 0.6px; }
+
+    .kpi-card.blue   .kpi-val { color: #0078D4; }
+    .kpi-card.green  .kpi-val { color: #107C41; }
+    .kpi-card.yellow .kpi-val { color: #CA8A04; }
+    .kpi-card.red    .kpi-val { color: #DC2626; }
+    .kpi-card.purple .kpi-val { color: #7C3AED; }
+
+    /* ── Result block ─────────────────────────────────────────────── */
+    .result-block {
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 18px;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: linear-gradient(110deg, #EFF6FF, #DBEAFE);
+      border-bottom: 1px solid #BFDBFE;
+      cursor: pointer;
+    }
+
+    .result-filename {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1D4ED8;
+    }
+
+    .coverage-badge {
+      background: #0078D4;
+      color: #fff;
+      border-radius: 20px;
+      padding: 2px 11px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .coverage-badge.warn { background: #CA8A04; }
+    .coverage-badge.bad  { background: #DC2626; }
+
+    .result-body { padding: 20px; display: none; }
+    .result-body.open { display: block; }
+
+    /* ── Tabs ──────────────────────────────────────────────────── */
+    .tabs { display: flex; gap: 0; border-bottom: 2px solid #E2E8F0; margin-bottom: 18px; }
+
+    .tab-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #64748B;
+      cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: #1E293B; }
+    .tab-btn.active { color: #0078D4; border-bottom-color: #0078D4; font-weight: 700; }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── Review queue items ──────────────────────────────────────── */
+    .rq-item {
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+
+    .rq-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      background: #FAFBFF;
+      transition: background 0.1s;
+    }
+
+    .rq-head:hover { background: #F0F4FF; }
+
+    .priority-badge {
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .priority-badge.blocker { background: #FEE2E2; color: #991B1B; }
+    .priority-badge.high    { background: #FEF3C7; color: #92400E; }
+    .priority-badge.medium  { background: #FEF9C3; color: #713F12; }
+    .priority-badge.low     { background: #DCFCE7; color: #14532D; }
+
+    .rq-body { padding: 12px 14px; background: #fff; display: none; }
+    .rq-body.open { display: block; }
+
+    /* ── Anti-pattern items ────────────────────────────────────── */
+    .ap-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .ap-icon { font-size: 20px; flex-shrink: 0; }
+
+    .ap-type { font-size: 13px; font-weight: 700; color: #92400E; margin-bottom: 3px; }
+    .ap-desc { font-size: 12.5px; color: #78350F; }
+
+    /* ── Code preview ─────────────────────────────────────────── */
+    .code-preview {
+      background: #0F172A;
+      color: #E2E8F0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: 'Consolas', 'Fira Code', monospace;
+      font-size: 12px;
+      overflow: auto;
+      white-space: pre;
+      max-height: 260px;
+      margin-top: 10px;
+    }
+
+    /* ── Info / warn inline ────────────────────────────────────── */
+    .inline-info {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: #1D4ED8;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      margin-bottom: 12px;
+    }
+
+    .inline-warn {
+      background: #FFFBEB;
+      border: 1px solid #FCD34D;
+      color: #78350F;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      margin-bottom: 12px;
+    }
+
+    /* ── Download card ─────────────────────────────────────────── */
+    .dl-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      background: #FAFBFF;
+      margin-bottom: 10px;
+      transition: border-color 0.15s;
+    }
+
+    .dl-card:hover { border-color: #BFDBFE; background: #EFF6FF; }
+
+    .dl-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #DBEAFE, #EFF6FF);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .dl-label { font-size: 13.5px; font-weight: 700; color: #1E293B; }
+    .dl-sub   { font-size: 12px; color: #64748B; margin-top: 1px; }
+
+    /* ── Empty state ──────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 52px 24px;
+    }
+
+    .empty-state-icon { font-size: 52px; margin-bottom: 14px; }
+
+    .empty-state h3 { font-size: 17px; font-weight: 700; color: #1E293B; margin-bottom: 8px; }
+
+    .empty-state p { font-size: 13.5px; color: #64748B; max-width: 360px; margin: 0 auto; line-height: 1.6; }
+
+    /* ── Animations ──────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up { animation: fadeUp 0.35s ease forwards; }
+
+    /* ── Error toast ─────────────────────────────────────────── */
+    #toast-container {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: #1E293B;
+      color: #fff;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 13px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      max-width: 340px;
+      animation: fadeUp 0.3s ease forwards;
+    }
+
+    .toast.error { background: #7F1D1D; }
+    .toast.success { background: #064E3B; }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #sidebar { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ════════════════════════════════════════ SIDEBAR ══════════════════════ -->
+  <aside id="sidebar">
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <img src="/logo" alt="Mastech Digital" id="logo-img"
+           onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';" />
+      <div id="logo-fallback" style="display:none; align-items:center; gap:6px;">
+        <span style="font-size:22px; color:#3B6DB3">&#9783;</span>
+        <div>
+          <span style="font-size:13px; font-weight:800; color:#1E3A5F">MAS</span><span style="font-size:13px; font-weight:800; color:#E87722">TECH</span>
+          <div style="font-size:9px; font-weight:700; color:#4D4D4D; letter-spacing:1px">DIGITAL</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-app-name">Tableau → Power BI<br>Accelerator</div>
+    <div class="sidebar-tagline">Intelligent migration at scale</div>
+
+    <hr class="sidebar-divider" />
+
+    <!-- Nav -->
+    <div style="padding: 0 8px 8px; flex:1;">
+      <div class="nav-section-label" style="padding: 0 12px 8px;">Navigation</div>
+
+      <div class="nav-item active" id="nav-upload" onclick="goToView('upload')">
+        <span class="nav-icon">📂</span>
+        <span>Upload Workbooks</span>
+        <span class="nav-badge blue" id="badge-files">0</span>
+      </div>
+
+      <div class="nav-item" id="nav-pipeline" onclick="goToView('pipeline')">
+        <span class="nav-icon">⚡</span>
+        <span>Run Migration</span>
+        <span class="nav-badge" id="badge-pipeline" style="display:none"></span>
+      </div>
+
+      <div class="nav-item" id="nav-results" onclick="goToView('results')">
+        <span class="nav-icon">📊</span>
+        <span>Results</span>
+        <span class="nav-badge green" id="badge-results" style="display:none"></span>
+      </div>
+
+      <hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:10px 12px;" />
+
+      <div class="nav-section-label" style="padding: 0 12px 8px;">Pipeline Steps</div>
+
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot">✓</div> Ingest &amp; Parse TWB/TWBX</div>
+        <div class="feature-item"><div class="feature-dot">✓</div> Analyze complexity &amp; schema</div>
+        <div class="feature-item"><div class="feature-dot">✓</div> Deterministic rule translation</div>
+        <div class="feature-item"><div class="feature-dot">✓</div> Claude AI → LOD / DAX</div>
+        <div class="feature-item"><div class="feature-dot">✓</div> TMDL · M · Report JSON output</div>
+        <div class="feature-item"><div class="feature-dot">✓</div> PBIP / PBIT packaging</div>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="settings-box">
+      <div class="settings-title">⚙ Settings</div>
+
+      <div class="settings-label">Project Name</div>
+      <input class="settings-input" id="project-name" type="text"
+             placeholder="MigratedReport" value="MigratedReport" />
+
+      <div class="settings-label">Output Format</div>
+      <div class="radio-row" id="fmt-radios">
+        <div class="radio-pill selected" data-fmt="pbip" onclick="selectFmt('pbip')">PBIP</div>
+        <div class="radio-pill" data-fmt="pbit" onclick="selectFmt('pbit')">PBIT</div>
+        <div class="radio-pill" data-fmt="both" onclick="selectFmt('both')">Both</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════ MAIN ════════════════════════ -->
+  <div id="main">
+
+    <!-- Top bar -->
+    <div id="topbar">
+      <div class="breadcrumb">
+        <span>Mastech Digital</span>
+        <span class="breadcrumb-sep">›</span>
+        <span id="bc-current" class="breadcrumb-current">Upload Workbooks</span>
+      </div>
+      <div class="topbar-right">
+        <div class="api-badge warn" id="api-badge">
+          <div class="api-dot"></div>
+          <span id="api-badge-text">Checking API…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div id="content">
+
+      <!-- ══════════════════ UPLOAD VIEW ══════════════════ -->
+      <div class="view active" id="view-upload">
+        <!-- Hero -->
+        <div class="hero fade-up">
+          <div class="hero-title">⚡ Tableau → Power BI Migration Accelerator</div>
+          <div class="hero-sub">
+            Deterministic rule engine + Claude Sonnet AI for LOD expressions &amp; table calculations → DAX.<br>
+            Drop your Tableau workbooks below and get production-ready PBIP/PBIT output in seconds.
+          </div>
+          <div class="hero-chips">
+            <span class="hero-chip">TWB · TWBX · TDS · TDSX</span>
+            <span class="hero-chip">TMDL Semantic Model</span>
+            <span class="hero-chip">Power Query M</span>
+            <span class="hero-chip">Report JSON</span>
+            <span class="hero-chip">Review Queue</span>
+          </div>
+        </div>
+
+        <!-- Upload card -->
+        <div class="card fade-up" style="margin-bottom:18px;">
+          <div class="card-head">
+            <div class="card-head-title">📂 Upload Workbooks</div>
+            <label class="btn btn-outline btn-sm" for="file-input" style="cursor:pointer;">
+              Browse Files
+            </label>
+            <input type="file" id="file-input" multiple accept=".twb,.twbx,.tds,.tdsx"
+                   style="display:none" onchange="handleFileInput(event)" />
+          </div>
+          <div class="card-body" style="padding:0;">
+            <!-- Drop zone -->
+            <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+              <div class="upload-icon-wrap">📤</div>
+              <div class="upload-headline">Drag &amp; drop your Tableau files here</div>
+              <div class="upload-sub">or click anywhere in this area to browse</div>
+              <div class="upload-formats">
+                <span class="fmt-badge">.twb</span>
+                <span class="fmt-badge">.twbx</span>
+                <span class="fmt-badge">.tds</span>
+                <span class="fmt-badge">.tdsx</span>
+              </div>
+            </div>
+
+            <!-- File list -->
+            <div id="file-list-wrap" style="display:none;">
+              <div style="padding: 12px 16px 4px; display:flex; align-items:center; justify-content:space-between;">
+                <div style="font-size:13px; font-weight:700; color:#1E293B;">
+                  Queued files — <span id="file-count">0</span> workbook(s)
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="clearAllFiles()">Clear all</button>
+              </div>
+              <div id="file-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Run button -->
+        <div style="display:flex; gap:12px; align-items:center;" class="fade-up">
+          <button class="btn btn-primary btn-lg" id="run-btn" onclick="startMigration()" disabled>
+            🚀 Run Migration
+          </button>
+          <div style="font-size:12.5px; color:#64748B;" id="run-hint">
+            Upload at least one file to begin.
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════ PIPELINE VIEW ══════════════════ -->
+      <div class="view" id="view-pipeline">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+          <div>
+            <div style="font-size:20px; font-weight:800; color:#1E293B; margin-bottom:3px;">
+              ⚡ Migration Pipeline
+            </div>
+            <div style="font-size:13px; color:#64748B;" id="pipeline-status-line">
+              Running…
+            </div>
+          </div>
+          <div id="overall-progress-wrap" style="text-align:right; min-width:180px;">
+            <div style="font-size:12px; color:#64748B; margin-bottom:4px;" id="overall-pct-label">0%</div>
+            <div class="progress-wrap" style="width:180px;">
+              <div class="progress-fill" id="overall-progress-bar" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="pipeline-files-container"></div>
+      </div>
+
+      <!-- ══════════════════ RESULTS VIEW ══════════════════ -->
+      <div class="view" id="view-results">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+          <div>
+            <div style="font-size:20px; font-weight:800; color:#1E293B; margin-bottom:3px;">
+              📊 Migration Results
+            </div>
+            <div style="font-size:13px; color:#64748B;" id="results-summary-line">
+              Migration complete.
+            </div>
+          </div>
+          <button class="btn btn-outline" onclick="goToView('upload')">↩ New Migration</button>
+        </div>
+
+        <div id="results-container">
+          <div class="empty-state">
+            <div class="empty-state-icon">📊</div>
+            <h3>No results yet</h3>
+            <p>Run a migration first to see results here.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <!-- ════════════════════════════════════════ SCRIPTS ════════════════════ -->
+  <script>
+  // ── State ──────────────────────────────────────────────────────────────────
+  const state = {
+    currentView: 'upload',
+    outputFmt: 'pbip',
+    jobId: null,
+    fileResults: [],
+    apiActive: false,
+  };
+
+  const STEP_NAMES = [
+    'Ingesting file',
+    'Parsing Tableau XML',
+    'Analyzing complexity & anti-patterns',
+    'Translating — deterministic rules',
+    'Translating — AI (LOD / table calcs → DAX)',
+    'Generating TMDL · Power Query M · Report JSON',
+    'Packaging output',
+    'Migration complete',
+  ];
+
+  const STEP_ICONS = ['📥','🔍','📊','🔄','🤖','🏗️','📦','✅'];
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    checkApiStatus();
+    loadFiles();
+    setupDragDrop();
+  });
+
+  // ── API Status ─────────────────────────────────────────────────────────────
+  async function checkApiStatus() {
+    try {
+      const r = await fetch('/api/status');
+      const d = await r.json();
+      state.apiActive = d.api_active;
+      const badge = document.getElementById('api-badge');
+      const text  = document.getElementById('api-badge-text');
+      if (d.api_active) {
+        badge.className = 'api-badge ok';
+        text.textContent = 'Claude API active';
+      } else {
+        badge.className = 'api-badge warn';
+        text.textContent = 'No API key — limited mode';
+      }
+    } catch {
+      document.getElementById('api-badge-text').textContent = 'API status unknown';
+    }
+  }
+
+  // ── Navigation ─────────────────────────────────────────────────────────────
+  function goToView(view) {
+    state.currentView = view;
+
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('nav-' + view)?.classList.add('active');
+
+    const labels = { upload: 'Upload Workbooks', pipeline: 'Run Migration', results: 'Results' };
+    document.getElementById('bc-current').textContent = labels[view] || view;
+  }
+
+  // ── Output format radio ────────────────────────────────────────────────────
+  function selectFmt(fmt) {
+    state.outputFmt = fmt;
+    document.querySelectorAll('.radio-pill').forEach(p => {
+      p.classList.toggle('selected', p.dataset.fmt === fmt);
+    });
+  }
+
+  // ── File management ────────────────────────────────────────────────────────
+  async function loadFiles() {
+    try {
+      const r = await fetch('/api/files');
+      const d = await r.json();
+      renderFileList(d.files || []);
+    } catch (e) {
+      console.error('loadFiles:', e);
+    }
+  }
+
+  function renderFileList(files) {
+    const count   = files.length;
+    const badge   = document.getElementById('badge-files');
+    const countEl = document.getElementById('file-count');
+    const runBtn  = document.getElementById('run-btn');
+    const runHint = document.getElementById('run-hint');
+    const listWrap = document.getElementById('file-list-wrap');
+    const dropZone = document.getElementById('drop-zone');
+
+    badge.textContent = count;
+    if (countEl) countEl.textContent = count;
+
+    if (count > 0) {
+      listWrap.style.display = 'block';
+      dropZone.style.padding = '20px 32px';
+      dropZone.querySelector('.upload-headline').textContent = 'Drop more files or click to add';
+      dropZone.querySelector('.upload-icon-wrap').style.width = '44px';
+      dropZone.querySelector('.upload-icon-wrap').style.height = '44px';
+      runBtn.disabled = false;
+      runHint.textContent = `${count} workbook(s) ready to migrate.`;
+    } else {
+      listWrap.style.display = 'none';
+      dropZone.style.padding = '52px 32px';
+      dropZone.querySelector('.upload-headline').textContent = 'Drag & drop your Tableau files here';
+      runBtn.disabled = true;
+      runHint.textContent = 'Upload at least one file to begin.';
+    }
+
+    const list = document.getElementById('file-list');
+    list.innerHTML = '';
+    files.forEach(f => {
+      const ext  = f.name.split('.').pop().toUpperCase().slice(0, 4);
+      const kb   = Math.max(Math.round(f.size / 1024), 1);
+      const row  = document.createElement('div');
+      row.className = 'file-row fade-up';
+      row.innerHTML = `
+        <div class="file-ext">${ext}</div>
+        <div class="file-meta">
+          <div class="file-name">${escHtml(f.name)}</div>
+          <div class="file-size">${kb} KB</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="color:#DC2626; margin-left:8px;"
+                onclick="removeFile('${escHtml(f.name)}')">✕ Remove</button>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  async function handleFileInput(evt) {
+    const files = Array.from(evt.target.files);
+    await uploadFiles(files);
+    evt.target.value = '';
+  }
+
+  async function uploadFiles(files) {
+    for (const file of files) {
+      const allowed = ['.twb','.twbx','.tds','.tdsx'];
+      const ext = '.' + file.name.split('.').pop().toLowerCase();
+      if (!allowed.includes(ext)) {
+        showToast(`Unsupported file: ${file.name}`, 'error');
+        continue;
+      }
+      const fd = new FormData();
+      fd.append('file', file);
+      try {
+        const r = await fetch('/api/upload', { method: 'POST', body: fd });
+        if (!r.ok) {
+          const e = await r.json();
+          showToast(`Upload failed: ${e.detail}`, 'error');
+        }
+      } catch (e) {
+        showToast(`Network error: ${e.message}`, 'error');
+      }
+    }
+    await loadFiles();
+  }
+
+  async function removeFile(name) {
+    await fetch(`/api/files/${encodeURIComponent(name)}`, { method: 'DELETE' });
+    await loadFiles();
+  }
+
+  async function clearAllFiles() {
+    const r = await fetch('/api/files');
+    const d = await r.json();
+    for (const f of d.files) {
+      await fetch(`/api/files/${encodeURIComponent(f.name)}`, { method: 'DELETE' });
+    }
+    await loadFiles();
+  }
+
+  // ── Drag & drop ────────────────────────────────────────────────────────────
+  function setupDragDrop() {
+    const zone = document.getElementById('drop-zone');
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', e => { if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      uploadFiles(Array.from(e.dataTransfer.files));
+    });
+  }
+
+  // ── Migration ──────────────────────────────────────────────────────────────
+  async function startMigration() {
+    const r = await fetch('/api/files');
+    const d = await r.json();
+    const files = (d.files || []).map(f => f.name);
+    if (!files.length) { showToast('No files to migrate.', 'error'); return; }
+
+    const projectName = document.getElementById('project-name').value.trim() || 'MigratedReport';
+
+    const res = await fetch('/api/migrate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ files, project_name: projectName, output_format: state.outputFmt }),
+    });
+
+    if (!res.ok) {
+      const e = await res.json();
+      showToast(`Failed to start: ${e.detail}`, 'error');
+      return;
+    }
+
+    const { job_id } = await res.json();
+    state.jobId = job_id;
+
+    // Build pipeline view
+    buildPipelineView(files);
+    goToView('pipeline');
+
+    const badgePipe = document.getElementById('badge-pipeline');
+    badgePipe.style.display = 'inline';
+    badgePipe.textContent = '▶';
+    badgePipe.className = 'nav-badge blue';
+
+    // Connect SSE
+    connectSSE(job_id, files);
+  }
+
+  // Per-file step state: fileSteps[fileName][stepIndex] = {status, msg}
+  let fileSteps = {};
+
+  function buildPipelineView(files) {
+    fileSteps = {};
+    const container = document.getElementById('pipeline-files-container');
+    container.innerHTML = '';
+
+    files.forEach((name, fi) => {
+      fileSteps[name] = STEP_NAMES.map((s, i) => ({ status: 'pending', msg: '' }));
+
+      const wrap = document.createElement('div');
+      wrap.id = `pf-${fi}`;
+      wrap.className = 'card fade-up';
+      wrap.style.marginBottom = '18px';
+      wrap.innerHTML = `
+        <div class="card-head">
+          <div class="card-head-title">
+            <span style="font-size:20px;">📄</span>
+            <span>${escHtml(name)}</span>
+          </div>
+          <div style="font-size:12px; color:#64748B;" id="pf-status-${fi}">Waiting…</div>
+        </div>
+        <div class="card-body" style="padding:16px;">
+          <div class="step-track" id="pf-steps-${fi}"></div>
+          <div class="progress-wrap" style="margin-top:14px;">
+            <div class="progress-fill" id="pf-progress-${fi}" style="width:0%"></div>
+          </div>
+        </div>
+      `;
+      container.appendChild(wrap);
+      renderSteps(fi, name);
+    });
+  }
+
+  function renderSteps(fi, fileName) {
+    const container = document.getElementById(`pf-steps-${fi}`);
+    if (!container) return;
+    container.innerHTML = '';
+
+    const steps = fileSteps[fileName];
+    steps.forEach((s, i) => {
+      const item = document.createElement('div');
+      item.className = `step-item ${s.status}`;
+      item.id = `step-${fi}-${i}`;
+
+      const icon = s.status === 'done' ? '✓' : s.status === 'error' ? '✗' : s.status === 'running' ? '' : (i + 1).toString();
+      const spinnerHtml = s.status === 'running' ? '<div class="step-spinner" style="margin-left:auto;flex-shrink:0;"></div>' : '';
+
+      item.innerHTML = `
+        <div class="step-num ${s.status}">${icon}</div>
+        <div class="step-body">
+          <div class="step-label ${s.status}">${STEP_ICONS[i]} ${escHtml(STEP_NAMES[i])}</div>
+          ${s.msg ? `<div class="step-msg">${escHtml(s.msg)}</div>` : ''}
+        </div>
+        ${spinnerHtml}
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  function connectSSE(jobId, files) {
+    const evtSrc = new EventSource(`/api/migrate/${jobId}/progress`);
+
+    evtSrc.onmessage = (e) => {
+      const evt = JSON.parse(e.data);
+
+      if (evt.type === 'step') {
+        const { file, file_index: fi, step, status, message } = evt;
+        fileSteps[file][step] = { status, msg: message || '' };
+
+        renderSteps(fi, file);
+
+        // Update progress bar per file
+        const done = fileSteps[file].filter(s => s.status === 'done').length;
+        const pct  = Math.round((done / STEP_NAMES.length) * 100);
+        const bar  = document.getElementById(`pf-progress-${fi}`);
+        if (bar) bar.style.width = pct + '%';
+
+        const statusLine = document.getElementById(`pf-status-${fi}`);
+        if (statusLine) {
+          if (status === 'running') statusLine.textContent = `Step ${step + 1}/8 — ${STEP_NAMES[step]}`;
+          else if (status === 'done' && step === STEP_NAMES.length - 1) {
+            statusLine.innerHTML = '<span style="color:#107C41;font-weight:700;">✅ Complete</span>';
+          }
+        }
+
+        // Overall progress
+        updateOverallProgress(files);
+      }
+
+      if (evt.type === 'file_error') {
+        const { file, file_index: fi } = evt;
+        if (fi !== undefined && fileSteps[file]) {
+          const currentStep = fileSteps[file].findIndex(s => s.status === 'running');
+          if (currentStep >= 0) {
+            fileSteps[file][currentStep] = { status: 'error', msg: evt.message };
+            renderSteps(fi, file);
+          }
+        }
+      }
+
+      if (evt.type === 'all_done') {
+        evtSrc.close();
+        onMigrationComplete(jobId, files);
+      }
+
+      if (evt.type === 'fatal') {
+        evtSrc.close();
+        showToast(evt.message, 'error');
+        document.getElementById('pipeline-status-line').textContent = '❌ Fatal error — check the console.';
+      }
+    };
+
+    evtSrc.onerror = () => {
+      evtSrc.close();
+      showToast('Connection to server lost.', 'error');
+    };
+  }
+
+  function updateOverallProgress(files) {
+    let totalDone = 0;
+    files.forEach(name => {
+      if (fileSteps[name]) {
+        totalDone += fileSteps[name].filter(s => s.status === 'done').length;
+      }
+    });
+    const total = files.length * STEP_NAMES.length;
+    const pct = total > 0 ? Math.round((totalDone / total) * 100) : 0;
+    document.getElementById('overall-progress-bar').style.width = pct + '%';
+    document.getElementById('overall-pct-label').textContent = pct + '%';
+    document.getElementById('pipeline-status-line').textContent = `Running… ${pct}% complete`;
+  }
+
+  async function onMigrationComplete(jobId, files) {
+    document.getElementById('pipeline-status-line').innerHTML =
+      '<span style="color:#107C41;font-weight:700;">✅ Migration complete!</span>';
+    document.getElementById('overall-progress-bar').style.width = '100%';
+    document.getElementById('overall-pct-label').textContent = '100%';
+
+    const badgePipe = document.getElementById('badge-pipeline');
+    badgePipe.textContent = '✓';
+    badgePipe.className = 'nav-badge green';
+
+    try {
+      const r = await fetch(`/api/migrate/${jobId}/result`);
+      const d = await r.json();
+      state.fileResults = d.files || [];
+      renderResults(jobId, d.files || []);
+
+      const badgeRes = document.getElementById('badge-results');
+      badgeRes.style.display = 'inline';
+      badgeRes.textContent = d.files.filter(f => f.success).length;
+    } catch (e) {
+      showToast('Could not load results: ' + e.message, 'error');
+    }
+  }
+
+  // ── Results rendering ──────────────────────────────────────────────────────
+  function renderResults(jobId, results) {
+    const container = document.getElementById('results-container');
+    container.innerHTML = '';
+
+    const successCount = results.filter(r => r.success).length;
+    const failCount    = results.length - successCount;
+
+    document.getElementById('results-summary-line').textContent =
+      `${successCount} workbook(s) migrated successfully${failCount ? `, ${failCount} failed` : ''}.`;
+
+    results.forEach((res, ri) => {
+      const block = document.createElement('div');
+      block.className = 'result-block fade-up';
+
+      if (!res.success) {
+        block.innerHTML = `
+          <div class="result-header" style="background: #FEF2F2; border-color:#FECACA; cursor:default;">
+            <div class="result-filename" style="color:#991B1B;">
+              <span>❌</span> ${escHtml(res.file)}
+            </div>
+          </div>
+          <div class="result-body open">
+            <div class="inline-warn">⚠️ ${escHtml(res.error || 'Unknown error')}</div>
+            ${res.traceback ? `<details><summary style="cursor:pointer;font-size:12.5px;color:#64748B;margin-bottom:6px;">Show traceback</summary><div class="code-preview">${escHtml(res.traceback)}</div></details>` : ''}
+          </div>
+        `;
+        container.appendChild(block);
+        return;
+      }
+
+      const s = res.stats;
+      const covPct = s.coverage_pct || 0;
+      const badgeCls = covPct >= 90 ? '' : covPct >= 70 ? 'warn' : 'bad';
+      const icon = s.blockers === 0 ? '✅' : s.blockers < 3 ? '⚠️' : '🔴';
+
+      block.innerHTML = `
+        <div class="result-header" onclick="toggleResult('rb-${ri}')">
+          <div class="result-filename">
+            <span>${icon}</span>
+            <span>${escHtml(res.file)}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="coverage-badge ${badgeCls}">${covPct}% coverage</span>
+            <span style="color:#64748B; font-size:18px;" id="rb-${ri}-chevron">▼</span>
+          </div>
+        </div>
+        <div class="result-body open" id="rb-${ri}">
+          <!-- KPIs -->
+          <div class="kpi-grid" style="margin-bottom:20px;">
+            <div class="kpi-card blue"><div class="kpi-val">${s.data_sources}</div><div class="kpi-lbl">Data Sources</div></div>
+            <div class="kpi-card blue"><div class="kpi-val">${s.worksheets}</div><div class="kpi-lbl">Worksheets</div></div>
+            <div class="kpi-card blue"><div class="kpi-val">${s.dashboards}</div><div class="kpi-lbl">Dashboards</div></div>
+            <div class="kpi-card purple"><div class="kpi-val">${s.calculated_fields}</div><div class="kpi-lbl">Calc Fields</div></div>
+            <div class="kpi-card ${covPct >= 90 ? 'green' : covPct >= 70 ? 'yellow' : 'red'}">
+              <div class="kpi-val">${covPct}%</div><div class="kpi-lbl">Coverage</div>
+            </div>
+            <div class="kpi-card green">
+              <div class="kpi-val">${Math.round((s.average_confidence || 0) * 100)}%</div><div class="kpi-lbl">Confidence</div>
+            </div>
+            <div class="kpi-card ${s.needs_review > 0 ? 'yellow' : 'green'}">
+              <div class="kpi-val">${s.needs_review}</div><div class="kpi-lbl">To Review</div>
+            </div>
+            <div class="kpi-card ${s.blockers > 0 ? 'red' : 'green'}">
+              <div class="kpi-val">${s.blockers}</div><div class="kpi-lbl">Blockers</div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tabs" id="tabs-${ri}">
+            <div class="tab-btn active" onclick="switchTab(${ri}, 'dl', this)">⬇ Download</div>
+            <div class="tab-btn" onclick="switchTab(${ri}, 'report', this)">📋 Report</div>
+            <div class="tab-btn" onclick="switchTab(${ri}, 'rq', this)">🔍 Review Queue</div>
+            <div class="tab-btn" onclick="switchTab(${ri}, 'ap', this)">⚠️ Anti-patterns</div>
+          </div>
+
+          <!-- Download tab -->
+          <div class="tab-pane active" id="tp-${ri}-dl">
+            ${buildDownloadTab(jobId, res)}
+          </div>
+
+          <!-- Report tab -->
+          <div class="tab-pane" id="tp-${ri}-report">
+            ${buildReportTab(res)}
+          </div>
+
+          <!-- Review queue tab -->
+          <div class="tab-pane" id="tp-${ri}-rq">
+            ${buildReviewQueueTab(res)}
+          </div>
+
+          <!-- Anti-patterns tab -->
+          <div class="tab-pane" id="tp-${ri}-ap">
+            ${buildAntiPatternsTab(res)}
+          </div>
+        </div>
+      `;
+      container.appendChild(block);
+    });
+
+    goToView('results');
+  }
+
+  function toggleResult(id) {
+    const body    = document.getElementById(id);
+    const chevron = document.getElementById(id + '-chevron');
+    const isOpen  = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    if (chevron) chevron.textContent = isOpen ? '▶' : '▼';
+  }
+
+  function switchTab(ri, pane, btn) {
+    document.querySelectorAll(`#tabs-${ri} .tab-btn`).forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['dl','report','rq','ap'].forEach(p => {
+      const el = document.getElementById(`tp-${ri}-${p}`);
+      if (el) el.classList.toggle('active', p === pane);
+    });
+  }
+
+  function buildDownloadTab(jobId, res) {
+    const stem     = res.file.replace(/\.[^.]+$/, '');
+    const hasPbit  = !!res.pbit_path;
+    const fmt      = (res.report?.output_format) || state.outputFmt;
+    let html = '';
+
+    if (hasPbit) {
+      html += `
+        <div class="inline-info">💼 <strong>${escHtml(stem)}.pbit</strong> is ready — single file, open directly in Power BI Desktop.</div>
+        <div class="dl-card">
+          <div class="dl-icon">💼</div>
+          <div style="flex:1;">
+            <div class="dl-label">${escHtml(stem)}.pbit</div>
+            <div class="dl-sub">Power BI Template · one-click open in Power BI Desktop</div>
+          </div>
+          <a href="/api/download/${jobId}/${encodeURIComponent(res.file)}/pbit" class="btn btn-primary btn-sm">⬇ Download</a>
+        </div>
+      `;
+    }
+
+    html += `
+      <div class="dl-card">
+        <div class="dl-icon">📦</div>
+        <div style="flex:1;">
+          <div class="dl-label">${escHtml(stem)}_pbi_output.zip</div>
+          <div class="dl-sub">Full PBIP package · TMDL · Power Query M · Report JSON · Review queue</div>
+        </div>
+        <a href="/api/download/${jobId}/${encodeURIComponent(res.file)}/zip" class="btn btn-primary btn-sm">⬇ Download ZIP</a>
+      </div>
+    `;
+
+    if (!hasPbit) {
+      html += `<div class="inline-info">ℹ️ PBIP format: extract ZIP, then double-click the <code>.pbip</code> file in Power BI Desktop.<br>The launcher file requires the <code>*.Report/</code> and <code>*.SemanticModel/</code> folders alongside it.</div>`;
+    }
+
+    return html;
+  }
+
+  function buildReportTab(res) {
+    const report = res.report || {};
+    const stats  = report.translation_stats || {};
+    const inv    = report.inventory || {};
+
+    return `
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:14px;">
+          <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px;">Inventory</div>
+          ${Object.entries(inv).map(([k,v]) => `<div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0;border-bottom:1px solid #F1F5F9;">
+            <span style="color:#64748B;">${escHtml(k.replace(/_/g,' '))}</span>
+            <span style="font-weight:700;color:#1E293B;">${v}</span>
+          </div>`).join('')}
+        </div>
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:14px;">
+          <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:8px;">Translation Stats</div>
+          ${Object.entries(stats).map(([k,v]) => `<div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0;border-bottom:1px solid #F1F5F9;">
+            <span style="color:#64748B;">${escHtml(k.replace(/_/g,' '))}</span>
+            <span style="font-weight:700;color:#1E293B;">${typeof v === 'number' && k.includes('confidence') ? Math.round(v*100)+'%' : v}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+      <details>
+        <summary style="cursor:pointer; font-size:12.5px; color:#0078D4; font-weight:600; margin-bottom:8px;">View full JSON report</summary>
+        <div class="code-preview">${escHtml(JSON.stringify(report, null, 2))}</div>
+      </details>
+    `;
+  }
+
+  function buildReviewQueueTab(res) {
+    const rq   = res.report?.review_queue_summary || {};
+    const items = res.report?.review_queue_items || [];
+
+    let html = `
+      <div class="kpi-grid" style="grid-template-columns: repeat(4,1fr); margin-bottom:16px;">
+        <div class="kpi-card red"><div class="kpi-val">${rq.blockers || 0}</div><div class="kpi-lbl">🔴 Blockers</div></div>
+        <div class="kpi-card yellow"><div class="kpi-val">${rq.high || 0}</div><div class="kpi-lbl">🟠 High</div></div>
+        <div class="kpi-card yellow"><div class="kpi-val">${rq.medium || 0}</div><div class="kpi-lbl">🟡 Medium</div></div>
+        <div class="kpi-card green"><div class="kpi-val">${rq.low || 0}</div><div class="kpi-lbl">🟢 Low</div></div>
+      </div>
+    `;
+
+    if (!items.length) {
+      html += `<div style="text-align:center; padding:28px; color:#64748B;">
+        <div style="font-size:32px; margin-bottom:8px;">✅</div>
+        <div style="font-size:14px; font-weight:600;">No review items to display here.</div>
+        <div style="font-size:12.5px; margin-top:4px;">Download the review_queue.json from the ZIP for full details.</div>
+      </div>`;
+    }
+
+    items.forEach((item, ii) => {
+      const p = item.review_priority || 'low';
+      html += `
+        <div class="rq-item">
+          <div class="rq-head" onclick="toggleRqItem('rqi-${ii}')">
+            <span class="priority-badge ${p}">${p.toUpperCase()}</span>
+            <span style="font-size:13px; font-weight:600; flex:1;">${escHtml((item.kind||'').toUpperCase())} — ${Math.round((item.confidence||0)*100)}% confidence</span>
+            <span style="font-size:11px; color:#94A3B8;">${escHtml(item.method||'')}</span>
+            <span style="margin-left:8px; color:#CBD5E1;">▼</span>
+          </div>
+          <div class="rq-body" id="rqi-${ii}">
+            ${item.rationale ? `<div class="inline-info">💡 ${escHtml(item.rationale)}</div>` : ''}
+            ${(item.caveats||[]).map(c => `<div class="inline-warn">⚠️ ${escHtml(c)}</div>`).join('')}
+            ${item.artifact_preview ? `<div class="code-preview">${escHtml(item.artifact_preview)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    });
+
+    return html;
+  }
+
+  function buildAntiPatternsTab(res) {
+    const patterns = res.report?.anti_patterns || [];
+    const unused   = res.report?.unused_worksheets || [];
+
+    if (!patterns.length && !unused.length) {
+      return `<div style="text-align:center; padding:32px;">
+        <div style="font-size:40px; margin-bottom:10px;">✅</div>
+        <div style="font-size:15px; font-weight:700; color:#107C41;">No anti-patterns detected!</div>
+        <div style="font-size:13px; color:#64748B; margin-top:6px;">Your workbook is clean.</div>
+      </div>`;
+    }
+
+    const SEV_ICONS = { high:'🔴', medium:'🟡', low:'🟢' };
+    let html = '';
+
+    patterns.forEach(ap => {
+      const sev = ap.severity || 'medium';
+      html += `
+        <div class="ap-item">
+          <div class="ap-icon">${SEV_ICONS[sev] || '⚠️'}</div>
+          <div>
+            <div class="ap-type">${escHtml((ap.type||'').replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase()))}</div>
+            <div class="ap-desc">${escHtml(ap.description||'')}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    if (unused.length) {
+      html += `<div style="margin-top:14px; font-size:13px; font-weight:700; color:#1E293B; margin-bottom:8px;">
+        Unused worksheets (not referenced by any dashboard):
+      </div>`;
+      unused.forEach(ws => {
+        html += `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #F1F5F9;font-size:13px;color:#64748B;">
+          <span style="font-size:16px;">📄</span> <code>${escHtml(ws)}</code>
+        </div>`;
+      });
+    }
+
+    return html;
+  }
+
+  function toggleRqItem(id) {
+    const body = document.getElementById(id);
+    if (body) body.classList.toggle('open');
+  }
+
+  // ── Utilities ──────────────────────────────────────────────────────────────
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  function showToast(msg, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
+
+  </script>
+</body>
+</html>

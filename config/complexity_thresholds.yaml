@@ -1,0 +1,23 @@
+# Scoring weights for calculation complexity (0-100 scale)
+ast_depth_weight: 10         # points per level beyond depth 3
+lod_presence: 30             # flat bonus if LOD expression present
+table_calc_presence: 25      # flat bonus if table calc present
+nested_calc_per_dep: 8       # per dependency on another calculated field
+parameter_dependency: 5      # per parameter reference
+
+# Routing thresholds
+deterministic_max_score: 40   # scores <= this go to deterministic translator
+llm_assisted_max_score: 85    # scores <= this go to LLM-assisted translator
+manual_review_min_score: 86   # scores >= this are flagged for manual review
+
+# Dashboard complexity weights
+zone_count_weight: 2
+action_count_weight: 5
+cross_ds_action_weight: 15
+floating_zone_penalty: 8
+
+# Risk score composition
+calc_complexity_weight: 0.4
+dashboard_complexity_weight: 0.3
+data_source_complexity_weight: 0.2
+anti_pattern_weight: 0.1

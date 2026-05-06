@@ -1,0 +1,31 @@
+# Tableau default color palette → Power BI theme JSON mapping
+
+tableau_palettes:
+  tableau10:
+    colors: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC948","#B07AA1","#FF9DA7","#9C755F","#BAB0AC"]
+  tableau20:
+    colors: ["#4E79A7","#A0CBE8","#F28E2B","#FFBE7D","#59A14F","#8CD17D","#B6992D","#F1CE63","#499894","#86BCB6","#E15759","#FF9D9A","#79706E","#BAB0AC","#D37295","#FABFD2","#B07AA1","#D4A6C8","#9D7660","#D7B5A6"]
+  colorblind10:
+    colors: ["#1170AA","#FC7D0B","#A3ACB9","#57606C","#5FA2CE","#C85200","#7B848F","#A3CDE9","#FFB14E","#262D34"]
+
+default_palette: tableau10
+
+font_mappings:
+  "Tableau Book": "Segoe UI"
+  "Tableau Regular": "Segoe UI"
+  "Tableau Light": "Segoe UI Light"
+  "Tableau Medium": "Segoe UI Semibold"
+  "Tableau Bold": "Segoe UI Bold"
+  "Arial": "Arial"
+  "Helvetica": "Helvetica Neue"
+
+powerbi_theme_template:
+  name: "Tableau Migration Theme"
+  dataColors: []   # populated from palette
+  background: "#FFFFFF"
+  foreground: "#252423"
+  tableAccent: "#4E79A7"
+  visualStyles:
+    "*":
+      "*":
+        fontFamily: [{"value": "Segoe UI"}]
