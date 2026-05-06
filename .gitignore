@@ -1,15 +1,36 @@
+# 🔒 Secrets
 .env
 .env.*
+*.env
+
+# 🐍 Python
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# 🧪 Testing
+.pytest_cache/
+
+# 🧠 Virtual env
 .venv/
 venv/
-__pycache__/
-.pytest_cache/
+
+# 🤖 AI tools
 .claude/
 .aider*
+
+# 📊 Outputs (ignore ALL generated files)
 output_*/
 pbi_output/
 pbit_debug/
 input_workbooks/
+
+# 📄 Large / binary
+*.docx
 *.pbix
 *.pbit
-*.docx
+
+# 🧰 System
+.DS_Store
+Thumbs.db
