@@ -16,6 +16,71 @@ from accelerator.ir.schema import IRMigrationUnit, TranslationResult
 from accelerator.translators.visual_translator import translate_visual
 from accelerator.translators.dashboard_translator import translate_dashboard
 
+_ROLE_ALIASES_BY_VISUAL = {
+    # Tableau map entries: axis/values/legend/tooltips/...
+    "clusteredBarChart": {
+        "axis": "Category",
+        "values": "Y",
+        "legend": "Series",
+        "tooltips": "Tooltips",
+        "data_labels": "Tooltips",
+    },
+    "lineChart": {
+        "axis": "Category",
+        "values": "Y",
+        "legend": "Series",
+        "tooltips": "Tooltips",
+        "data_labels": "Tooltips",
+    },
+    "areaChart": {
+        "axis": "Category",
+        "values": "Y",
+        "legend": "Series",
+        "tooltips": "Tooltips",
+        "data_labels": "Tooltips",
+    },
+    "scatterChart": {
+        "x_axis": "X",
+        "y_axis": "Y",
+        "legend": "Legend",
+        "bubble_size": "Size",
+        "details": "Details",
+        "tooltips": "Tooltips",
+        "data_labels": "Tooltips",
+    },
+    "pieChart": {
+        "legend": "Legend",
+        "values": "Values",
+        "details": "Details",
+        "tooltips": "Tooltips",
+        "data_labels": "Tooltips",
+    },
+    "treemap": {
+        "group": "Group",
+        "values": "Values",
+        "tooltips": "Tooltips",
+    },
+    "tableEx": {
+        "rows": "Values",
+        "columns": "Values",
+        "values": "Values",
+        "tooltips": "Tooltips",
+    },
+    "filledMap": {
+        "location": "Location",
+        "color_saturation": "Values",
+        "tooltips": "Tooltips",
+    },
+    "azureMap": {
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "location": "Location",
+        "bubble_size": "Size",
+        "color_saturation": "Legend",
+        "tooltips": "Tooltips",
+    },
+}
+
 
 def _build_theme(unit: IRMigrationUnit) -> dict:
     from pathlib import Path
@@ -100,7 +165,9 @@ def _make_container(visual_data: dict, x: int, y: int, width: int, height: int,
 
     # Convert shelf projections to PBIP queryRef format
     pbi_projections: dict = {}
+    role_aliases = _ROLE_ALIASES_BY_VISUAL.get(visual_type, {})
     for slot, fields in raw_projections.items():
+        role_key = role_aliases.get(slot, slot)
         refs = []
         for f_info in fields:
             field_name = f_info.get("field", "") if isinstance(f_info, dict) else str(f_info)
@@ -109,7 +176,7 @@ def _make_container(visual_data: dict, x: int, y: int, width: int, height: int,
             elif field_name:
                 refs.append({"queryRef": field_name, "active": True})
         if refs:
-            pbi_projections[slot] = refs
+            pbi_projections[role_key] = refs
 
     visual_name = str(uuid4()).replace("-", "")[:16]
 
